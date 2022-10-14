@@ -1,0 +1,24 @@
+{
+  "name": "eschbornreport",
+  "version": "1.0.0",
+  "description": "Korean company review website",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Minsun91/EschbornReport.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Minsun91/EschbornReport/issues"
+  },
+  "homepage": "https://github.com/Minsun91/EschbornReport#readme",
+  "dependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
