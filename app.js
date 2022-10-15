@@ -1,10 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
+// const { swaggerUi, specs } = require('./src/swagger');
 
 require("dotenv/config");
 
-const indexRouter = require("./layers/routers");
+const indexRouter = require("./src/layers/routers");
 
 const app = express();
 const port = 3000;
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 app.use("/api", indexRouter);
+// app.use("/api-docs",swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
 app.use(express.static(__dirname));
 
 app.listen(port, ()=> {
