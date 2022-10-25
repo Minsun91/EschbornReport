@@ -1,0 +1,24 @@
+  {
+    "compilerOptions": {
+      "allowJs": true,
+      "strict": true,         
+      "module": "commonjs",                    
+      "target": "ES5",
+      "outDir": "./dist",
+      "rootDir":".",
+      "moduleResolution": "Node",
+      "lib": ["ES2015", "DOM", "DOM.Iterable"],
+      "noImplicitAny": false,
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      // "declaration": true,
+      // "typeRoots": ["./@types"]
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "dist", "test", "coverage", "docs", "scripts"],
+    "tsd": {
+      "testFiles": [
+        "types/**/*.test-d.ts"
+      ]
+    }
+  }
