@@ -1,7 +1,7 @@
-const joi = require("joi");
+import joi from "joi"
 
-module.exports = class Validation{
-    getEmailJoi = () => {
+// module.exports = class Validation{
+    const getEmailJoi = () => {
         const emailRegExp = 
         /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
         return joi.string().max(30).required().regex(emailRegExp).messages({
@@ -11,14 +11,14 @@ module.exports = class Validation{
           "string.max": "Email must not exceed 30 letters.",
         });
       };
-      getNicknameJoi = () => {
+    const getNicknameJoi = () => {
         return joi.string().max(8).required().messages({
           "string.base": "Nickname must be a string.",
           "any.required": "Please enter Nickname.",
           "string.max": "Maximum letters of Nickname is 8 letters.",
         });
       };
-      getPasswordJoi = ()=> {
+    const getPasswordJoi = ()=> {
         const passwordRegExp = 
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
         return joi.string().max(16).min(8).required().regex(passwordRegExp).messages({
@@ -29,7 +29,7 @@ module.exports = class Validation{
             "string.max": "Password must not exceed 16 letters",
           });
       }
-      getConfirmJoi = ()=> {
+    const getConfirmJoi = ()=> {
         const confirmRegExp = 
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
         return joi.string().max(16).min(8).required().regex(confirmRegExp).messages({
@@ -40,5 +40,6 @@ module.exports = class Validation{
             "string.max": "confirmpassword must not exceed 16 letters",
           });
       };
-}
+
+export {getEmailJoi, getNicknameJoi, getPasswordJoi, getConfirmJoi }
 

@@ -15,7 +15,7 @@
 // module.exports = reviewRouter;
 
 import { Router } from "express";
-import { ReviewController } from "../controllers/review.controller";
+import { ReviewController } from "../controllers/review";
 import { authMiddlewares } from "../middlewares/auth.middlewares";
 
 // const reviewRouter: Router = Router();

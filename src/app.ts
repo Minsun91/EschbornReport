@@ -2,7 +2,7 @@ import express from "express"
 import cors from "cors"
 import morgan from "morgan"
 // import {swaggerUi, specs} from "./swagger"
-import indexRouter from "./layers/routers"
+import { authRouter, postRouter, swaggerUi } from "./routers"
 
 import * as dotenv from "dotenv/config"
 
