@@ -15,14 +15,14 @@
 // module.exports = reviewRouter;
 
 import { Router } from "express";
-import { ReviewController } from "../controllers/review";
+import {postReview, getReview} from "../controllers/review.controller";
 import { authMiddlewares } from "../middlewares/auth.middlewares";
 
-// const reviewRouter: Router = Router();
-// reviewRouter.post("/", new ReviewController().createPost);
-// reviewRouter.get("/", new ReviewController().getAllPost);
+const reviewRouter: Router = Router();
+reviewRouter.post("/:postId", authMiddlewares, postReview);
+reviewRouter.get("/", authMiddlewares, getReview);
 // reviewRouter.get("/:postId", authMiddlewares, new ReviewController().getPost)
 // reviewRouter.patch("/:postId", authMiddlewares, new ReviewController().updatePost)
 // reviewRouter.delete("/:postId", authMiddlewares, new ReviewController().deletePost)
 
-// export { reviewRouter };
+export { reviewRouter };

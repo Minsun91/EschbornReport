@@ -15,15 +15,15 @@
 // module.exports = postRouter;
 
 import { Router } from "express";
-import { PostController } from "../controllers/post.controller";
+import {createPost, getPost} from "../controllers/post.controller";
 import { authMiddlewares } from "../middlewares/auth.middlewares";
 
 const postRouter: Router = Router();
-postRouter.post("/", authMiddlewares, new PostController().createPost);
-postRouter.get("/", new PostController().getAllPost);
-postRouter.get("/:postId", authMiddlewares, new PostController().getPost)
+postRouter.post("/", authMiddlewares, createPost);
+postRouter.get("/", getPost);
+// postRouter.get("/:postId", authMiddlewares, new PostController().getPost)
 // postRouter.post("/:", authMiddlewares, new PostCotroller().findCompany) //회사 찾기
-postRouter.patch("/:postId", authMiddlewares, new PostController().updatePost)
-postRouter.delete("/:postId", authMiddlewares, new PostController().deletePost)
+// postRouter.patch("/:postId", authMiddlewares, new PostController().updatePost)
+// postRouter.delete("/:postId", authMiddlewares, new PostController().deletePost)
 
 export { postRouter };

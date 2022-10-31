@@ -6,6 +6,8 @@ export interface PostAttributes {
   title: string;
   content: string;
   isLiked?: boolean;
+  isBookmarked?:boolean;
+  companyName: string;
 }
 
 export interface PostModel extends Model<PostAttributes>, PostAttributes {}
@@ -20,7 +22,7 @@ export function PostFactory(sequelize: Sequelize): PostStatic {
     'Post',
     {
       postId: {
-          type: DataTypes.STRING,
+          type: DataTypes.INTEGER,
           primaryKey: true,
           allowNull:false,
         },
@@ -34,6 +36,10 @@ export function PostFactory(sequelize: Sequelize): PostStatic {
         },
         isLiked: {
           type: DataTypes.BOOLEAN,
+          allowNull:true
+        },
+        companyName:{
+          type: DataTypes.STRING,
           allowNull:false
         }
       }, {

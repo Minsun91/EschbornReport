@@ -1,10 +1,13 @@
 import { Model, Sequelize, DataTypes, BuildOptions } from 'sequelize';
 
 interface Companyattributes {
+  companyId?:number,
   postId?: number;
   userId?: number;
-  title: string;
-  content: string;
+  address?:string;
+  isLiked?: boolean;
+  isBookmarked?: boolean;
+  companyName: string;
 }
 
 export interface CompanyModel extends Model<Companyattributes>, Companyattributes { }
@@ -26,11 +29,18 @@ export function CompanyFactory(sequelize: Sequelize): CompanyStatic {
       },
       address: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
-      Like: {
-        type: DataTypes.INTEGER,
-        allowNull: false
+      isLiked: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+      },
+      isBookmarked: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+      }, companyName:{
+        type:DataTypes.STRING,
+        allowNull:false
       }
     }, {
     modelName: 'Company',

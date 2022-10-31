@@ -1,17 +1,19 @@
-import * as jwtLib from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 import {RequestHandler, Request, Response, NextFunction} from "express";
 import * as dotenv from "dotenv/config"
+const env = process.env;
 
     export interface Type {
-        type: string;
+        Type: string;
     }
     export interface token {
-        type: string;
+        token: string;
     }
 
 export const authMiddlewares: RequestHandler = (req:Request, res:Response, next: NextFunction) => {
-    const authorization = req?.headers?;
+    const authorization = req?.headers
     const {Type, token} = (authorization || "").split(" ");
+console.log(Type, token);
 
     try{
         if(!token || Type !== "Bearer") {
@@ -19,10 +21,10 @@ export const authMiddlewares: RequestHandler = (req:Request, res:Response, next:
                 message: "You're not logged in."
             })
         }
-        const tokenValue = jwt.verify(token, env.ACCESS_SECRET);
+        const tokenValue = jwt.verify(token, env.JWT_SECRET);
         res.locals.userId = tokenValue.userId;
-    } catch(err:any){
-        console.log(err)
+    } catch(error){
+        console.log(error)
         return res.status(400).json({message: "Invalid Token"})
     }
     next();

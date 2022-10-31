@@ -2,21 +2,21 @@
 import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize';
 
 interface ReviewAttributes {
-  reviewId?:number;
+  reviewId?: number;
   userId?: number;
   postId?: number;
   review: string;
-  date: Date;
+  date?: Date;
 }
 
-export interface ReviewModel extends Model<ReviewAttributes>, ReviewAttributes {}
-export class Review extends Model<ReviewModel, ReviewAttributes> {}
+export interface ReviewModel extends Model<ReviewAttributes>, ReviewAttributes { }
+export class Review extends Model<ReviewModel, ReviewAttributes> { }
 
 export type ReviewStatic = typeof Model & {
-  new (values?: object, options?:BuildOptions): ReviewModel;
+  new(values?: object, options?: BuildOptions): ReviewModel;
 };
 
-export function ReviewFactory(sequelize:Sequelize): ReviewStatic {
+export function ReviewFactory(sequelize: Sequelize): ReviewStatic {
   return <ReviewStatic>sequelize.define(
     'Review',
     {
@@ -24,26 +24,22 @@ export function ReviewFactory(sequelize:Sequelize): ReviewStatic {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
-        unique:true
+        unique: true
       },
-      content: {
+      review: {
         type: DataTypes.STRING,
-      allowNull:false
-    },
-    review: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    date: {
-      allowNull: false,
-      type: DataTypes.DATE
-    }
+        allowNull: false,
+      },
+      date: {
+        allowNull: false,
+        type: DataTypes.DATE
+      }
     }, {
-      modelName: 'review',
+    modelName: 'review',
     tableName: 'review',
     timestamps: true,
     underscored: true,
-    }
+  }
   )
 }
 
