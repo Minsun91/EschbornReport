@@ -80,7 +80,8 @@ import { sequelize } from '../models/sequelize';
 import { dbType } from '.';
 
 class Post extends Model {
-  public company_id!: number; 
+  public post_id!: number; 
+  public companyName!: String;
   public review!: string;
   public workingHour!: number;
   public salary!: number;
@@ -94,6 +95,10 @@ Post.init(
       autoIncrement: true,
       primaryKey: true,
       type: Sequelize.INTEGER,
+    },
+    companyName: {
+      type:Sequelize.STRING,
+      allowNull: false
     },
     review: {
       type: Sequelize.STRING,

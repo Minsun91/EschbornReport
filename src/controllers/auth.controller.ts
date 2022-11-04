@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { User } from '../../sequelize/models';
-import  { Op } from 'sequelize';
+import { Op } from 'sequelize';
 // import { User} from "../../sequelize/models/user";
 import joi from 'joi'
 import { getEmailJoi, getNicknameJoi, getPasswordJoi } from "../modules/joiStorage"
 import * as bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
 
 // import * as nodemailer from 'nodemailer';
 // import * as ejs from 'ejs';
@@ -13,62 +14,75 @@ import * as bcrypt from 'bcrypt';
 
 //로컬 회원가입
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const { email, nickname, password, confirm } = req.body;
-        await joi.object({
-            email: getEmailJoi(),
-            password: getPasswordJoi(),
-            nickname: getNicknameJoi()
-        }).validateAsync({ email, nickname, password });
+  try {
+    const { email, nickname, password, confirm } = req.body;
+    await joi.object({
+      email: getEmailJoi(),
+      password: getPasswordJoi(),
+      nickname: getNicknameJoi()
+    }).validateAsync({ email, nickname, password });
 
-        if (password !== confirm) {
-          return res.status(400).send({
-              msg: 'fail',
-              error: 'Please check password',
-          });
-      }
-      
-      const dupEmail = await User.findOne({where:{email}})
-      console.log(dupEmail);
-  
-        if (dupEmail) {
-            return res.status(400).send({
-                msg: 'fail',
-                error: 'Already registered.',
-            });
-        }
+    if (password !== confirm) {
+      return res.status(400).json({
+        error: 'Please check password',
+      });
+    }
 
-        const hash = await bcrypt.hash(password, 12);
-        const createUser = await User.create({
-            email, nickname, password:hash
-        });
-        return res.status(200).send({
-            msg: 'success',
-            createUser,
-        });
-    } catch (error) {
-        console.log(error)
-        return res.status(400).json({ errorMessage: 'Unknow error' })
-    } 
+    const dupEmail = await User.findOne({ where: { email } })
+
+    if (dupEmail) {
+      return res.status(400).json({
+        error: 'Already registered. Please login',
+      });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+    
+    const createUser = await User.create({
+      email, nickname, password: hash
+    });
+    return res.status(200).json({
+      msg: 'success',
+    });
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({ errorMessage: 'Unknow error' })
+  }
 };
 
 //로컬 로그인
 const signIn = async (req: Request, res: Response, next: NextFunction) => {
-    let { email, nickname, password } = req.body;
-    let {userId} = res.locals;
+  let { email, password } = req.body;
+  // let { userId } = res.locals;
 
-    try {
-        await joi.object({
-            email: getEmailJoi(),
-            password: getPasswordJoi(),
-            nickname: getNicknameJoi()
-        }).validateAsync({ email, nickname, password });
-        const result = await signIn(email, nickname, password);
-        return res.status(400).json(result)
-    } catch (error) {
-        console.log(error);
-        next(error);
+  try {
+    //입력된 이메일이 DB에 있는지 확인하고, 없으면 에러 메세지 전달
+    const user = await User.findOne({
+      where: { email },
+        raw:true}    );
+    console.log("로그인한 유저 정보가 나오겠지", user)
+    if (!user) {
+      return res.status(400).json({ errorMessage: 'Please signup' })
     }
+
+    //입력된 비밀번호를 암호화 시켜서 기존 암호화된 비밀번호와 비교한 후, 다르면 에러 메세지 전달 
+    const hashedPassword = user.password;
+    const comparePassword = await bcrypt.compare(req.body.password, hashedPassword);
+    if (!comparePassword) {
+      return res.status(400).json({ errorMessage: 'Please information. please type correctly.' })
+    }
+
+    //이메일, 비번 다 맞으면 access 토큰 발급 
+    const accessToken = jwt.sign(
+      { userId: user.user_id, }, 
+      process.env.ACCESS_SECRET, 
+      { expiresIn: process.env.ACCESS_OPTION_EXPIRESIN });
+    return res.status(200).json({accessToken: accessToken});
+
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 };
 
 //이메일 발송
@@ -125,37 +139,37 @@ const signIn = async (req: Request, res: Response, next: NextFunction) => {
 
 //비밀번호 변경
 const changePassword = async (req: Request, res: Response) => {
-    try {
-      const { email, password } = req.body;
-      const {userId} = res.locals
-      const userCheck = await User.findOne({
-        where: {
-          [Op.and]: { userId: userId, email: email },
-        },
-      });
-      if (!userCheck) {
-        res.status(400).send({
-          result: 'fail',
-          errorMessage: 'Cannot find email.',
-        });
-        return;
-      }
-      // const hash = await bcrypt.hash(password, 12);
-      await User.update(
-        {password:password
-        //   password: hash,
-        },
-        {
-          where: { email: email },
-        }
-      );
-      res.status(200).json({ result: 'success' });
-    } catch (error) {
-      console.log(error);
+  try {
+    const { email, password } = req.body;
+    const { userId } = res.locals
+    const userCheck = await User.findOne({
+      where: {
+        [Op.and]: { userId: userId, email: email },
+      },
+    });
+    if (!userCheck) {
       res.status(400).send({
-        errorMessage: 'Unknown Error',
+        result: 'fail',
+        errorMessage: 'Cannot find email.',
       });
+      return;
     }
-  };
+    const hash = await bcrypt.hash(password, 12);
+    await User.update(
+      {
+        password: hash,
+      },
+      {
+        where: { email: email },
+      }
+    );
+    res.status(200).json({ result: 'success' });
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({
+      errorMessage: 'Unknown Error',
+    });
+  }
+};
 
 export { signUp, signIn, changePassword };

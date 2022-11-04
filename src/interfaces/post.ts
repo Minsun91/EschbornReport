@@ -1,9 +1,10 @@
 export interface Posts {
     postId?: number;
-    title: string;
-    content: string;
-    userId?:number
-    nickname?: string;
-    isLiked?:boolean;
+    review: string;
+    workingHour: number;
+    salary:number
+    holiday: number;
+    benefit:number;
     isBookmarked?:boolean;
+    isLiked?:boolean;
 }

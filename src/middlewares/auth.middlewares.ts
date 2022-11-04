@@ -1,31 +1,36 @@
 import * as jwt from "jsonwebtoken";
-import {RequestHandler, Request, Response, NextFunction} from "express";
+import express, { Request, Response, NextFunction } from "express";
 import * as dotenv from "dotenv/config"
 const env = process.env;
+import { User } from '../../sequelize/models';
+import { Auths } from '../interfaces/auth';
 
-    export interface Type {
-        Type: string;
-    }
-    export interface token {
-        token: string;
-    }
+export interface Type {
+    Type: string[];
+}
+export interface token {
+    token: string[];
+}
 
-export const authMiddlewares: RequestHandler = (req:Request, res:Response, next: NextFunction) => {
-    const authorization :any = req?.headers
-    const {Type, token} = (authorization || "").split(" ");
-// console.log(Type, token);
+export const authMiddlewares = (req: Request, res: Response, next: NextFunction) => {
+    const authorization:any = req?.headers.authorization;
 
-    try{
-        if(!token || Type !== "Bearer") {
+    const Type = authorization.split(' ')[0];
+    const token = authorization.split(' ')[1];
+    console.log(Type, token)
+    // const {Type, token} = (authorization || "").split(" ");
+
+    try {
+        if (!token || Type !== "Bearer") {
             return res.status(400).json({
                 message: "You're not logged in."
             })
         }
-        const tokenValue = jwt.verify(token, env.JWT_SECRET);
+        const tokenValue = jwt.verify(token, env.ACCESS_SECRET);
         res.locals.userId = tokenValue.userId;
-    } catch(error){
+    } catch (error) {
         console.log(error)
-        return res.status(400).json({message: "Invalid Token"})
+        return res.status(400).json({ message: "Invalid Token" })
     }
     next();
 }

@@ -4,7 +4,7 @@ import { authMiddlewares } from "../middlewares/auth.middlewares";
 
 const authRouter: Router = Router();
 authRouter.post("/signup", signUp); 
-authRouter.post("/signin", authMiddlewares, signIn);
+authRouter.post("/signin", signIn);
 // authRouter.patch("/maypage", new AuthController().logout);
 // authRouter.get("/token", new AuthController().publishToken);
 // authRouter.patch("/send-email", new AuthController().sendEmail);

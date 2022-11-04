@@ -6,14 +6,10 @@ import { getContenteJoi, getTitleJoi } from '../modules/joiStorage';
 
 const createPost = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { title, content, companyName } = req.body;
-        await joi.object({
-            title: getTitleJoi(),
-            content: getContenteJoi(),
-        }).validateAsync({ title, content });
+        const { companyName, review, workingHour, salary, holiday, benefit } = req.body;
 
         const createPosts = await Post.create({
-            title, content, companyName
+            companyName, review, workingHour, salary, holiday, benefit
         });
         res.status(200).send({ msg: 'success', companyName: companyName });
     } catch (error) {

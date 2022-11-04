@@ -12,6 +12,9 @@ module.exports = {
       review: {
         type: Sequelize.STRING
       },
+      companyName: {
+        type: Sequelize.STRING
+      },
       workingHour: {
         type: Sequelize.INTEGER
       },

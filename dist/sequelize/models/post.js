@@ -100,14 +100,18 @@ const sequelize_2 = require("../models/sequelize");
 class Post extends sequelize_1.Model {
 }
 Post.init({
-    company_id: {
+    post_id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
     },
+    companyName: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
     review: {
-        type: Sequelize.STRING(40),
+        type: Sequelize.STRING,
         allowNull: true,
     },
     workingHour: {
