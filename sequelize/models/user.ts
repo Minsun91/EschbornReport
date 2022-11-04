@@ -1,70 +1,117 @@
-'use strict';
-import { Model, Sequelize, DataTypes, BuildOptions } from 'sequelize';
+// 'use strict';
+// import { Sequelize, DataTypes, BuildOptions } from 'sequelize';
+// import { Table, Column, Model, HasMany } from 'sequelize-typescript';
 
-export interface UserAttributes {
-  userId?:number;
-  email:string;
-  nickname: string;
-  password: string;
-  confirm?: string;
-}
+// import {sequelize} from './index';
 
-export interface UserModel extends Model<UserAttributes>, UserAttributes{}
-export class User extends Model<UserModel, UserAttributes> {}
+// export interface UserAttributes {
+//   userId?:number;
+//   email:string;
+//   nickname: string;
+//   password: string;
+//   confirm?: string;
+// }
 
-export type UserStatic = typeof Model & {
-  new (values?: object, options?: BuildOptions): UserModel;
-};
+// export interface UserModel extends Model<UserAttributes>, UserAttributes{}
+// Table
+// export class User extends Model<UserModel, UserAttributes> {}
 
-export function UserFactory(sequelize:Sequelize): UserStatic{
-  return <UserStatic>sequelize.define(
-    'User',
-    {
-      userId : {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull:false,
-        unique: true
-      },
-      email: {
-        type:DataTypes.STRING, 
-        allowNull: false
-      },
-      nickname:{
-        type:DataTypes.STRING, 
-        allowNull: false
-      },
-      password: {
-        type:DataTypes.STRING, 
-        allowNull: false
-      },
-    }, {
+// export type UserStatic = typeof Model & {
+//   new (values?: object, options?: BuildOptions): UserModel;
+// };
+
+// export function UserFactory(sequelize:Sequelize): UserStatic{
+//   return <UserStatic>sequelize.define(
+//     // 'User'
+//     Table,
+//     {
+//       userId : {
+//         type: DataTypes.INTEGER,
+//         primaryKey: true,
+//         allowNull:false,
+//         unique: true
+//       },
+//       email: {
+//         type:DataTypes.STRING, 
+//         allowNull: false
+//       },
+//       nickname:{
+//         type:DataTypes.STRING, 
+//         allowNull: false
+//       },
+//       password: {
+//         type:DataTypes.STRING, 
+//         allowNull: false
+//       },
+//     }, {
       
-      modelName: 'User',
-      tableName: 'User',
-      timestamps: true,
-      underscored: true,
-    }
-  )
-}
+//       modelName: 'User',
+//       tableName: 'User',
+//       timestamps: true,
+//       underscored: true,
+//     }
+//   )
+// }
 
-  // User.associate = function(models) {
-  //   User.hasMany(models.Post, {
-  //     foreignKey: 'userId',
-  //     targetKey: 'userId',
-  //     onDelete: 'cascade',
-  //     onUpdate: 'cascade'
-  //   });
-  //   User.hasMany(models.Review, {
-  //     foreignKey: 'userId',
-  //     targetKey: 'userId',
-  //     onDelete: 'cascade',
-  //     onUpdate: 'cascade'
-  //   });
-  //   User.hasMany(models.Like, {
-  //     foreignKey: 'userId',
-  //     targetKey: 'userId',
-  //     onDelete: 'cascade',
-  //     onUpdate: 'cascade'
-  //   });
-  // }
+
+import * as Sequelize from 'sequelize';
+import { Model, DataTypes } from 'sequelize'; 
+import { sequelize } from '../models/sequelize';
+import { dbType } from '.';
+
+class User extends Model {
+  public user_id!: number; 
+  public email!: string;
+  public nickname!: string;
+  public password!: string;
+  public userGrade?: number; //1이면 일반, 2면 기업
+}
+User.init(
+  {
+    user_id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: DataTypes.INTEGER, //sequelize.integer에서 바꿔봄..
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    nickname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      // defaultValue: 'Kim',
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
+  },
+  {
+    sequelize,
+    timestamps: true,
+    modelName: 'User',
+    tableName: 'users',
+    charset: 'utf8',
+    collate: 'utf8_general_ci',
+  }
+);
+
+  export const associate=(db:dbType)=> {
+    db.User.hasMany(db.Post, {
+      foreignKey: 'user_id',
+      sourceKey: 'user_id',
+    });
+    db.User.hasMany(db.Company, {
+      foreignKey: 'user_id',
+      sourceKey: 'user_id',
+    });
+    db.User.hasMany(db.Like, {
+      foreignKey: 'user_id',
+      sourceKey: 'user_id',
+    });
+  }
+
+export default User;
+

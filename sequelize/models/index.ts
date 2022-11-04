@@ -1,13 +1,13 @@
 'use strict';
 import * as Sequelize from 'sequelize';
 import config  from '../config/config';
-import { UserFactory } from './user'
-import { PostFactory } from './post';
-import { CompanyFactory } from './company';
-import { ReviewFactory } from './review';
-import { LikeFactory } from './like';
+import User, { associate as associateUser } from './user'
+import Post, { associate as associatePost } from './post';
+import Company, { associate as associateCompany } from './company';
+import Like, { associate as associateLike} from './like';
 import * as dotenv from "dotenv/config"
-const env = process.env;
+const env = process.env || 'development';
+// import { sequelize } from '../models';
 
 import path from 'path';
 import fs from 'fs';
@@ -24,26 +24,23 @@ import fs from 'fs';
 //   sequelize = new Sequelize(config.database, config.username, config.password, config);
 // }
 
-export const sequelize = new Sequelize.Sequelize(
-  {
-    database: config.development.database,
-    username: config.development.username,
-    password: config.development.password,
-    host: config.development.host,
-    dialect: 'mysql',
-    // database:config.db_database,
-    // username: config.db_username,
-    // password: config.db_password,
-    // host: config.db_host,
-    // dialect: config.db_dialect
-  }
-);
+export {User};
+export {Post};
+export {Like};
+export {Company};
+// export const Post = PostFactory(sequelize);
+// export const Like = LikeFactory(sequelize);
+// export const Company = CompanyFactory(sequelize);
+// export const Review = ReviewFactory(sequelize);
 
-export const User = UserFactory(sequelize);
-export const Post = PostFactory(sequelize);
-export const Like = LikeFactory(sequelize);
-export const Company = CompanyFactory(sequelize);
-export const Review = ReviewFactory(sequelize);
+const db = {
+  User, Post, Like, Company
+};
+export type dbType = typeof db;
+associateUser(db);
+associatePost(db);
+associateCompany(db);
+associateLike(db);
 
 // fs
 //   .readdirSync(__dirname)
@@ -65,100 +62,3 @@ export const Review = ReviewFactory(sequelize);
 // db.Sequelize = Sequelize;
 
 // module.exports = db;
-
-//테이블간 관계 설정 ()
-User.hasMany(Post, {
-  foreignKey:"userId",
-  sourceKey:"userId"
-});
-User.hasMany(Review,{
-  foreignKey:"userId",
-  sourceKey:"userId"
-});
-User.hasMany(Company, {
-  foreignKey:"userId",
-  sourceKey:"userId"
-});
-Post.hasMany(Review, {
-  foreignKey:"postId",
-  sourceKey:"postId"
-});
-Post.hasMany(Like, {
-  foreignKey:"postId",
-  sourceKey:"postId"
-});
-
-Post.belongsTo(User, {
-  foreignKey:"userId",
-  targetKey:"userId",
-  onDelete:"cascade"
-});
-Review.belongsTo(User,{
-  foreignKey:"userId",
-  targetKey:"userId",
-  onDelete:"cascade"
-});
-Company.belongsTo(User, {
-  foreignKey:"userId",
-  targetKey:"userId",
-  onDelete:"cascade"
-});
-Review.belongsTo(Post, {
-  foreignKey:"postId",
-  targetKey:"postId",
-  onDelete:"cascade"
-});
-Like.belongsTo(Post, {
-  foreignKey:"postId",
-  targetKey:"postId",
-  onDelete:"cascade"
-});
-// Company.hasMany(Bookmark, {
-//   foreignKey:"companyId",
-//   sourceKey:"companyId"
-// });
-Company.hasMany(Like, {
-  foreignKey:"companyId",
-  sourceKey:"companyId"
-});
-Company.hasMany(Post, {
-  foreignKey:"companyId",
-  sourceKey:"companyId"
-});
-Company.hasMany(Review, {
-  foreignKey:"companyId",
-  sourceKey:"companyId"
-});
-
-// Company.belongsTo(Bookmark, {
-//   foreignKey:"companyId",
-//   sourceKey:"companyId"
-// });
-Like.belongsTo(Company, {
-  foreignKey:"companyId",
-  targetKey:"companyId",
-  onDelete:"cascade"
-});
-Post.belongsTo(Company, {
-  foreignKey:"companyId",
-  targetKey:"companyId",
-  onDelete:"cascade"
-});
-Review.belongsTo(Company, {
-  foreignKey:"companyId",
-  targetKey:"companyId",
-  onDelete:"cascade"
-});
-// Post.hasMany(PostImage, {
-//   foreignKey:"postId",
-//   targetKey:"postId"
-//, onDelete:"cascade" });
-
-Review.hasMany(Like, {
-  foreignKey:"rewiewId",
-  sourceKey:"reviewId"
-});
-Like.belongsTo(Review, {
-  foreignKey:"rewiewId",
-  targetKey:"reviewId"
-});

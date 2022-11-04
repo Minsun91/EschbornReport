@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import joi from 'joi';
-import { Company } from "../../sequelize/models/company"
-import { Post } from "../../sequelize/models/post"
+import Company from "../../sequelize/models/company"
+import Post from "../../sequelize/models/post"
 import { getContenteJoi, getTitleJoi } from '../modules/joiStorage';
 
 const createPost = async (req: Request, res: Response, next: NextFunction) => {

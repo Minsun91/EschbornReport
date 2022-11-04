@@ -11,9 +11,9 @@ const env = process.env;
     }
 
 export const authMiddlewares: RequestHandler = (req:Request, res:Response, next: NextFunction) => {
-    const authorization = req?.headers
+    const authorization :any = req?.headers
     const {Type, token} = (authorization || "").split(" ");
-console.log(Type, token);
+// console.log(Type, token);
 
     try{
         if(!token || Type !== "Bearer") {

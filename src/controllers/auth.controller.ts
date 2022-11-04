@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { User } from '../../sequelize/models';
 import  { Op } from 'sequelize';
-import { UserAttributes } from "../../sequelize/models/user";
+// import { User} from "../../sequelize/models/user";
 import joi from 'joi'
 import { getEmailJoi, getNicknameJoi, getPasswordJoi } from "../modules/joiStorage"
 import * as bcrypt from 'bcrypt';
@@ -140,7 +140,7 @@ const changePassword = async (req: Request, res: Response) => {
         });
         return;
       }
-    //   const hash = await bcrypt.hash(password, 12);
+      // const hash = await bcrypt.hash(password, 12);
       await User.update(
         {password:password
         //   password: hash,
