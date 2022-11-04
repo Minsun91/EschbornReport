@@ -1,51 +1,117 @@
-'use strict';
-const {Model} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  User.init({
-    userId : {
-      type: DataTypes.INTEGER,
+// 'use strict';
+// import { Sequelize, DataTypes, BuildOptions } from 'sequelize';
+// import { Table, Column, Model, HasMany } from 'sequelize-typescript';
+
+// import {sequelize} from './index';
+
+// export interface UserAttributes {
+//   userId?:number;
+//   email:string;
+//   nickname: string;
+//   password: string;
+//   confirm?: string;
+// }
+
+// export interface UserModel extends Model<UserAttributes>, UserAttributes{}
+// Table
+// export class User extends Model<UserModel, UserAttributes> {}
+
+// export type UserStatic = typeof Model & {
+//   new (values?: object, options?: BuildOptions): UserModel;
+// };
+
+// export function UserFactory(sequelize:Sequelize): UserStatic{
+//   return <UserStatic>sequelize.define(
+//     // 'User'
+//     Table,
+//     {
+//       userId : {
+//         type: DataTypes.INTEGER,
+//         primaryKey: true,
+//         allowNull:false,
+//         unique: true
+//       },
+//       email: {
+//         type:DataTypes.STRING, 
+//         allowNull: false
+//       },
+//       nickname:{
+//         type:DataTypes.STRING, 
+//         allowNull: false
+//       },
+//       password: {
+//         type:DataTypes.STRING, 
+//         allowNull: false
+//       },
+//     }, {
+      
+//       modelName: 'User',
+//       tableName: 'User',
+//       timestamps: true,
+//       underscored: true,
+//     }
+//   )
+// }
+
+
+import * as Sequelize from 'sequelize';
+import { Model, DataTypes } from 'sequelize'; 
+import { sequelize } from '../models/sequelize';
+import { dbType } from '.';
+
+class User extends Model {
+  public user_id!: number; 
+  public email!: string;
+  public nickname!: string;
+  public password!: string;
+  public userGrade?: number; //1이면 일반, 2면 기업
+}
+User.init(
+  {
+    user_id: {
+      allowNull: false,
+      autoIncrement: true,
       primaryKey: true,
-      allowNull:false
+      type: DataTypes.INTEGER, //sequelize.integer에서 바꿔봄..
     },
-    email: {type:DataTypes.STRING, allowNull: false},
-    nickname:{type:DataTypes.STRING, allowNull: false},
-    password: {type:DataTypes.STRING, allowNull: false},
-  }, {
+    email: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    nickname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      // defaultValue: 'Kim',
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    }
+  },
+  {
     sequelize,
-    modelName: 'User',
-    tableName: 'User',
     timestamps: true,
-    underscored: true,
-  });
-  User.associate = function(models) {
-    User.hasMany(models.Post, {
-      foreignKey: 'userId',
-      targetKey: 'userId',
-      onDelete: 'cascade',
-      onUpdate: 'cascade'
+    modelName: 'User',
+    tableName: 'users',
+    charset: 'utf8',
+    collate: 'utf8_general_ci',
+  }
+);
+
+  export const associate=(db:dbType)=> {
+    db.User.hasMany(db.Post, {
+      foreignKey: 'user_id',
+      sourceKey: 'user_id',
     });
-    User.hasMany(models.Review, {
-      foreignKey: 'userId',
-      targetKey: 'userId',
-      onDelete: 'cascade',
-      onUpdate: 'cascade'
+    db.User.hasMany(db.Company, {
+      foreignKey: 'user_id',
+      sourceKey: 'user_id',
     });
-    User.hasMany(models.Like, {
-      foreignKey: 'userId',
-      targetKey: 'userId',
-      onDelete: 'cascade',
-      onUpdate: 'cascade'
+    db.User.hasMany(db.Like, {
+      foreignKey: 'user_id',
+      sourceKey: 'user_id',
     });
   }
-  return User;
-};
+
+export default User;
+

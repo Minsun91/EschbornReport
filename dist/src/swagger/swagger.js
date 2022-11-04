@@ -1,7 +1,7 @@
 "use strict";
-var swaggerAutogen = require("swagger-autogen")();
-var swaggerJsdoc = require("swagger-jsdoc");
-var doc = {
+const swaggerAutogen = require("swagger-autogen")();
+const swaggerJsdoc = require("swagger-jsdoc");
+const doc = {
     info: {
         title: "API",
         description: "EschbornReport API",
@@ -11,7 +11,7 @@ var doc = {
         },],
     schemes: ["http"]
 };
-var specs = swaggerJsdoc(doc);
-var outputFile = "./swagger-output.json";
-var endpointsFiles = ["../app.js"];
+const specs = swaggerJsdoc(doc);
+const outputFile = "./swagger-output.json";
+const endpointsFiles = ["../app.js"];
 swaggerAutogen(outputFile, endpointsFiles, specs);

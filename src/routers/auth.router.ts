@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { AuthController } from "../controllers/auth.controller";
+import { signUp, signIn, changePassword } from "../controllers/auth.controller";
 import { authMiddlewares } from "../middlewares/auth.middlewares";
 
 const authRouter: Router = Router();
-authRouter.post("/signup", authMiddlewares, new AuthController().signUp);
-authRouter.post("/signin", new AuthController().signIn);
+authRouter.post("/signup", signUp); 
+authRouter.post("/signin", signIn);
 // authRouter.patch("/maypage", new AuthController().logout);
 // authRouter.get("/token", new AuthController().publishToken);
 // authRouter.patch("/send-email", new AuthController().sendEmail);

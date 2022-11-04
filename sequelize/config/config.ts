@@ -1,32 +1,42 @@
-require("dotenv").config();
-const env = process.env;
+import dotenv from 'dotenv';
+dotenv.config();
 
-const development = {
-  username: env.DB_DEV_USERNAME,
-  password: env.DB_DEV_PASSWORD,
-  database: env.DB_DEV_DATABASE,
-  host: env.DB_DEV_HOST,
-  dialect: 'mysql'
-  // env.DB_DEV_DIALECT,
+type Config = {
+  username: string;
+  password: string;
+  database: string;
+  host:string;
+  [key: string]: string | boolean | object | number;
 };
 
-const production = {
-  username: env.DB_PROD_USERNAME,
-  password: env.DB_PROD_PASSWORD,
-  database: env.DB_PROD_DATABASE,
-  host: env.DB_PROD_HOST,
-  dialect: env.DB_PROD_DIALECT,
-  //port: env.DB_PORT
+interface IConfigGroup {
+  development: Config;
+  test: Config;
+  production: Config;
+}
+
+const config: IConfigGroup = {
+  development: {
+    username: process.env.DB_USER!,
+    password: process.env.DB_PASSWORD!,
+    database: process.env.DB_NAME!,
+    host: process.env.DB_END_POINT!,
+    dialect: 'mysql'
+  },
+  test: {
+    username: process.env.DB_USER!,
+    password: process.env.DB_PASSWORD!,
+    database: process.env.DB_NAME! + '_test',
+    host: process.env.DB_END_POINT!,
+    dialect: 'mysql'
+  },
+  production: {
+    username: process.env.DB_USER!,
+    password: process.env.DB_PASSWORD!,
+    database: process.env.DB_NAME!,
+    host: process.env.DB_END_POINT!,
+    dialect: 'mysql'
+  },
 };
 
-const test = {
-  username: env.DB_USERNAME,
-  password: env.DB_PASSWORD,
-  database: env.DB_DATABASE_TEST,
-  host: env.DB_HOST,
-  dialect: 'mysql'
-  // env.DB_DIALECT,
-  //port: env.MYSQL_PORT
-};
-
-module.exports = { development, production, test };
+export default config;

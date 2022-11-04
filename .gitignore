@@ -1,3 +1,5 @@
 node_modules/
-.src/sequelize/config/cofig.js
+.src/sequelize/config/cofig.json
 .env
+dist/
+config/config.json

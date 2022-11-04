@@ -41,5 +41,29 @@ import joi from "joi"
           });
       };
 
-export {getEmailJoi, getNicknameJoi, getPasswordJoi, getConfirmJoi }
+      const getTitleJoi = ()=> {
+        return joi.string().min(1).required().messages({
+            "string.base": "Title must be a string.",
+            "any.required": "Please enter title.",
+            "string.min": "title must be more than 1 letters.",
+          });
+      };
+
+      const getContenteJoi = ()=> {
+        return joi.string().min(1).required().messages({
+            "string.base": "Content must be a string.",
+            "any.required": "Please enter content.",
+            "string.min": "content must be more than 1 letters.",
+          });
+      };
+      const getReviewJoi = ()=> {
+        return joi.string().min(1).required().messages({
+            "string.base": "Review must be a string.",
+            "any.required": "Please enter review.",
+            "string.min": "Review must be more than 1 letters.",
+          });
+      };
+
+
+export {getEmailJoi, getNicknameJoi, getPasswordJoi, getConfirmJoi , getTitleJoi, getContenteJoi, getReviewJoi}
 
