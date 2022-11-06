@@ -87,6 +87,8 @@ class Post extends Model {
   public salary!: number;
   public holiday!: number;
   public benefit!: number;
+  public user_id?: number;
+  public company_id?: number;
 }
 Post.init(
   {

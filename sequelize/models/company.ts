@@ -87,8 +87,8 @@
         type: Sequelize.INTEGER,
       },
       companyName: {
-        type: Sequelize.STRING(40),
-        allowNull: true,
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       avgPoint: {
         type: Sequelize.INTEGER,

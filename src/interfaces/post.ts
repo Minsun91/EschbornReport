@@ -1,4 +1,4 @@
-export interface Posts {
+export interface IPosts {
     postId?: number;
     review: string;
     workingHour: number;
@@ -7,4 +7,8 @@ export interface Posts {
     benefit:number;
     isBookmarked?:boolean;
     isLiked?:boolean;
+}
+
+export interface IQuery{
+    params:string; 
 }

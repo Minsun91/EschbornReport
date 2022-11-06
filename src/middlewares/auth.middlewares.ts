@@ -17,7 +17,6 @@ export const authMiddlewares = (req: Request, res: Response, next: NextFunction)
 
     const Type = authorization.split(' ')[0];
     const token = authorization.split(' ')[1];
-    console.log(Type, token)
     // const {Type, token} = (authorization || "").split(" ");
 
     try {
