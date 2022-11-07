@@ -3,5 +3,8 @@ export interface Auths {
     nickname: string;
     password: string;
     confirm: string;
-    userId?:number;
+    user_id?:number;
+    post_id?:number;
+    company_id?:number;
+    like_id?:number
 }

@@ -54,6 +54,9 @@
     public like_id!: number; 
     public isLiked!: boolean;
     public isBookMarked!: boolean;
+    public post_id?: number; 
+    public user_id?: number;
+    public company_id?: number;
   }
 
   Like.init(

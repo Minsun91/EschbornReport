@@ -7,6 +7,9 @@ export interface IPosts {
     benefit:number;
     isBookmarked?:boolean;
     isLiked?:boolean;
+    user_id?:number;
+    company_id?:number;
+    like_id?:number
 }
 
 export interface IQuery{

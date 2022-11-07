@@ -76,6 +76,9 @@
     public companyName!: string;
     public avgPoint!: number;
     public companyAddress?:string;
+    public userId?:number;
+    public postId?:number;
+    public likeId?:number
   }
 
   Company.init(

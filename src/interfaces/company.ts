@@ -3,4 +3,7 @@ export interface Companies {
     companyName: string;
     avgPoint: number;
     companyAddress?:string;
+    user_id?:number;
+    post_id?:number;
+    like_id?:number
 }
