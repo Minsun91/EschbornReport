@@ -30,20 +30,31 @@ const giveLike = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-// const giveLike = async (req: Request, res: Response, next: NextFunction) => {
-//     const { postId } = req.params;
-//     const { userId } = res.locals;
-//     try {
-//         await Like.create({
-//             isLiked: true,
-//             userId, postId
-//         });
-//         return res.status(200).json({ message: `User:${userId} liked Post: ${postId}` })
-//     } catch (error) {
-//         console.log(error)
-//         return res.status(400).json(error)
-//     }
-// }
+const giveBookMark = async (req: Request, res: Response, next: NextFunction) => {
+    const { postId } = req.params;
+    const { userId } = res.locals;
+    
+    try {
+        let already = await Like.findOne({
+            where: { userId, postId, isBookMarked: true },
+            attributes: ['like_id', 'postId'],
+            raw: true
+        });
+        console.log("already", already?.like_id)
+
+        if (already) {
+            await Like.destroy({ where:{like_id: already.like_id }})
+            return res.status(200).json({ message: `User:${userId} cancelled bookmark on Post#${postId}` })
+        } else {
+            await Like.create({isBookMarked: true, userId, postId})
+            return res.status(200).json({ message: `User:${userId} bookmarked Post#${postId}` })
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json(error)
+    }
+}
+
 const findLike = async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = res.locals;
     try {
@@ -76,4 +87,4 @@ const deleteLike = async (req: Request, res: Response, next: NextFunction) => {
     }
 }
 
-export { giveLike, findLike, deleteLike }
+export { giveLike, findLike, deleteLike, giveBookMark }
