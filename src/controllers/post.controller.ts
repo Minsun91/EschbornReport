@@ -4,13 +4,12 @@ import Company from "../../sequelize/models/company"
 import Post from "../../sequelize/models/post"
 import User from "../../sequelize/models/user"
 import { Companies } from "../interfaces/company";
-import {Op} from 'sequelize'
+import { Op } from 'sequelize'
 import { getContenteJoi, getTitleJoi } from '../modules/joiStorage';
 
 const createPost = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { companyName, review, workingHour, salary, holiday, benefit } = req.body;
-        // const createPosts = 
         await Post.create({
             companyName, review, workingHour, salary, holiday, benefit
         });
@@ -20,7 +19,7 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
             let avgPoint = (workingHour + salary + holiday + benefit) / 4
             return avgPoint
         }
-        let avgPoint: number = add(workingHour, salary, holiday, benefit);
+        let avgPoint: any = add(workingHour, salary, holiday, benefit).toFixed(2);
 
         //회사 이름 넣으면 address로 변환해주는 방법 찾아보기
         await Company.create({
@@ -36,27 +35,37 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
 const getPost = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const getPosts = await Post.findAll({
-            attributes: ['companyName'],
-            order: [["updatedAt", "DESC"]],
+            attributes: ['companyName', 'createdAt'],
+            order: [["updatedAt","DESC"]], //최신것부터 보여줌, 오래된거 보려면 "ASC"
             raw: true
         })
 
         let getCompanyName: any = [];
+        let getPostTime: any[] = [];
         for (let i = 0; i < getPosts.length; i++) {
             let getName: any = getPosts[i].companyName;
+            let getTime: any = getPosts[i].createdAt;
             getCompanyName.push(getName);
+            getPostTime.push(getTime);
         }
-
         let getCompanyGrade: any[] = [];
         for (let j = 0; j < getCompanyName.length; j++) {
             const grade = await Company.findAll({
+                attributes: ['avgPoint'],
                 where: { companyName: getCompanyName[j] },
-                attributes: ['avgPoint', 'companyName'],
                 raw: true
             })
-            getCompanyGrade.push(grade)
+            getCompanyGrade.push(grade[0].avgPoint)
         }
-        return res.status(200).json([...getCompanyGrade]) //[ { avgPoint: 11, companyName: 'dadada' } ] [ { avgPoint: 13, companyName: '유로마트' } ]
+
+        let getPost:any[] = [];
+        for (let k=0; k<getCompanyGrade.length; k ++) {
+            let result = getCompanyName[k]+", "+ getCompanyGrade[k]+", "+getPostTime[k];
+            let results = result.split(',')
+            getPost.push(results)
+        } 
+        // console.log(getPost); 
+        return res.status(200).json(getPost)
 
     } catch (error) {
         console.log(error)
@@ -86,24 +95,23 @@ const searchCompany = async (req: Request, res: Response, next: NextFunction) =>
     try {
         const findCompany = await Company.findAll({
             attributes: ['avgPoint', 'companyName'],
-            where: { companyName:{
-                [Op.substring]:`${companyName}`,
-            } 
-        },
+            where: {
+                companyName: {
+                    [Op.substring]: `${companyName}`,
+                }
+            },
             raw: true
-        }) 
+        })
 
-        let findCompanyPosts:any[] = [];
-        for (let i=0; i<findCompany.length; i++){
-            const findCompanyPost:any = await Post.findAll({
-                attributes:['review', 'workingHour', 'salary', 'holiday', 'benefit'],
-                where:{companyName : findCompany[i].companyName},
-                raw:true
+        let findCompanyPosts: any[] = [];
+        for (let i = 0; i < findCompany.length; i++) {
+            const findCompanyPost: any = await Post.findAll({
+                attributes: ['review', 'workingHour', 'salary', 'holiday', 'benefit'],
+                where: { companyName: findCompany[i].companyName },
+                raw: true
             });
             findCompanyPosts.push(findCompanyPost);
-            // return findCompanyPosts
-        }  
-        console.log(findCompanyPosts[0])
+        }
         return res.status(200).json([...findCompanyPosts[0]])
     } catch (error) {
         console.log(error);

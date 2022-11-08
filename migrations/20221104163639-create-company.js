@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       avgPoint: {
-        type: Sequelize.INTEGER
+        type: Sequelize.FLOAT
       },
       companyAddress: {
         type: Sequelize.STRING
