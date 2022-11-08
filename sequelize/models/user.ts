@@ -65,6 +65,9 @@ class User extends Model {
   public nickname!: string;
   public password!: string;
   public userGrade?: number; //1이면 일반, 2면 기업
+  public company_id?: number;
+  public post_id?: number;
+  public like_id?: number;
 }
 User.init(
   {
