@@ -1,6 +1,4 @@
 "use strict";
-// import { BuildOptions, DataTypes, Model, Sequelize } from 'sequelize';
-// import {sequelize} from './index';
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -26,74 +24,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.associate = void 0;
-// export interface PostAttributes {
-//   postId?: number;
-//   userId?: number;
-//   title: string;
-//   content: string;
-//   isLiked?: boolean;
-//   isBookmarked?:boolean;
-//   companyName: string;
-// }
-// export interface PostModel extends Model<PostAttributes>, PostAttributes {}
-// export class Post extends Model<PostModel, PostAttributes> {}
-// export type PostStatic = typeof Model & {
-//   new (values?: object, options?: BuildOptions): PostModel;
-// };
-// export function PostFactory(sequelize: Sequelize): PostStatic {
-//   return <PostStatic>sequelize.define(
-//     'Post',
-//     {
-//       postId: {
-//           type: DataTypes.INTEGER,
-//           primaryKey: true,
-//           allowNull:false,
-//         },
-//         title: {
-//           type: DataTypes.STRING,
-//           allowNull:false
-//         },
-//         content:{ 
-//           type: DataTypes.STRING,
-//           allowNull:false
-//         },
-//         isLiked: {
-//           type: DataTypes.BOOLEAN,
-//           allowNull:true
-//         },
-//         companyName:{
-//           type: DataTypes.STRING,
-//           allowNull:false
-//         }
-//       }, {
-//         modelName: 'Post',
-//     tableName: 'Post',
-//     timestamps: true,
-//     underscored: true
-//       }
-//   );
-// };
-// Promise.associate = function (models) {
-//   Promise.belongsTo(models.User, {
-//     foreignKey: "userId",
-//     targetKey: "userId",
-//     onUpdate: "cascade",
-//     onDelete: "cascade",
-//     //constraints: false,
-//   });
-//   Promise.hasMany(models.Review, {
-//     foreignKey: "postId",
-//     sourceKey: "postId",
-//     onUpdate: "cascade",
-//     onDelete: "cascade",
-//   });
-//   Promise.hasMany(models.Like, {
-//     foreignKey: "postId",
-//     sourceKey: "postId",
-//     onUpdate: "cascade",
-//     onDelete: "cascade",
-//   });
-// }
 const Sequelize = __importStar(require("sequelize"));
 const sequelize_1 = require("sequelize");
 const sequelize_2 = require("../models/sequelize");

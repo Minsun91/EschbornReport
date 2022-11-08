@@ -1,61 +1,17 @@
-// import {Model, Sequelize, DataTypes, BuildOptions} from 'sequelize'
-// import {sequelize} from './index';
-
-// interface LikeAttributes {
-//   likeId: number;
-//   postId?:number;
-//   userId?:number;
-//   isLiked?: boolean;
-//   isBookMarked?:boolean;
-// }
-
-// export interface LikeModel extends Model<LikeAttributes>,LikeAttributes{}
-// export class Like extends Model<LikeModel, LikeAttributes> { }
-
-// export type LikeStatic = typeof Model & {
-//   new(values?: object, options?: BuildOptions): LikeModel;
-// };
-
-// export function LikeFactory(sequelize:Sequelize): LikeStatic{
-//   return <LikeStatic>sequelize.define('Like',{
-//     likeId: {type: DataTypes.INTEGER, primaryKey: true, allowNull: true},
-//     isBookMarked: {type: DataTypes.BOOLEAN, allowNull: false},
-//     isLiked: {type: DataTypes.BOOLEAN, allowNull: false}
-
-//   }, {
-//     modelName: 'Like',
-//     tableName: 'Like',
-//     timestamps: true,
-//     underscored: true
-//   });
-// }
-  // Like.associate = function(models) {
-  //   Like.belongsTo(models.Post,{
-  //     foreignKey:'postId',
-  //     targetKey: 'postId'
-  //   });
-  //     Like.belongsTo(models.Review,{
-  //       foreignKey:'reviewId',
-  //       targetKey: 'reviewId'
-  //     });
-  //     Like.belongsTo(models.Like,{
-  //       foreignKey:'companyId',
-  //       targetKey: 'companyId'
-  //     });
-  // }
-  // return Like;
-
   import * as Sequelize from 'sequelize';
   import { Model, DataTypes } from 'sequelize';
   import { sequelize } from '../models/sequelize';
   import { dbType } from '.';
   
   class Like extends Model {
+    static findByIdAndDelete(arg0: { like_id: any; }) {
+        throw new Error('Method not implemented.');
+    }
     public like_id!: number; 
     public isLiked!: boolean;
     public isBookMarked!: boolean;
-    public post_id?: number; 
-    public user_id?: number;
+    public postId?: number; 
+    public userId?: number;
     public company_id?: number;
   }
 
@@ -74,8 +30,16 @@
       },
       isBookMarked: {
         type: Sequelize.BOOLEAN,
-        allowNull: false,
+        allowNull: true,
         defaultValue: false,
+      },
+      postId:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      userId:{
+        type: Sequelize.INTEGER,
+        allowNull: true,
       }
     },
     {

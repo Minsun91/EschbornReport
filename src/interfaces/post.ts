@@ -9,7 +9,9 @@ export interface IPosts {
     isLiked?:boolean;
     user_id?:number;
     company_id?:number;
-    like_id?:number
+    like_id?:number;
+    createdAt:Date;
+    updatedAt:Date
 }
 
 export interface IQuery{

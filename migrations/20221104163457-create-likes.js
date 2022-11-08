@@ -15,6 +15,12 @@ module.exports = {
       isBookMarked: {
         type: Sequelize.BOOLEAN
       },
+      userId: {
+        type: Sequelize.INTEGER
+      },
+      postId: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
